@@ -123,8 +123,7 @@ class LtDecoder(object):
     def stream_dump(self, out_stream):
 
         # Iterate through blocks, stopping before padding junk
-        for ix, block_bytes in enumerate(map(lambda p: int.to_bytes(p[1], self.blocksize, 'big'),
-                sorted(self.block_graph.eliminated.items(), key = lambda p:p[0]))):
+        for ix, block_bytes in enumerate([int.to_bytes(p[1], self.blocksize, 'big') for p in sorted(list(self.block_graph.eliminated.items()), key = lambda p:p[0])]):
             if ix < self.K-1 or self.filesize % self.blocksize == 0:
                 out_stream.write(block_bytes)
             else:
